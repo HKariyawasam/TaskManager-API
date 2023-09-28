@@ -64,6 +64,17 @@ public class TaskController {
         }
     }
 
+    // GET tasks by username and priority
+    @GetMapping("/user/{priority}/{username}")
+    public ResponseEntity<List<Task>> findTasksByUsernameAndPriority(@PathVariable String priority, @PathVariable String username) {
+        List<Task> tasks = taskService.getPriorityTasksForUser(priority,username);
+        if (!tasks.isEmpty()) {
+            return new ResponseEntity<>(tasks, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     // PUT
     @PutMapping("/update")
     public ResponseEntity<Task> update(@RequestBody Task task) {

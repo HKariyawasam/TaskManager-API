@@ -77,6 +77,19 @@ public class TaskService {
         }
     }
 
+    // Retrieve all the tasks based on priority
+    public List<Task> getPriorityTasksForUser(String priority, String username) {
+        try {
+            if (username == null || username.isEmpty()) {
+                throw new IllegalArgumentException("Username cannot be empty.");
+            }
+
+            return taskRepository.findAllByPriorityAndUsername(priority,username);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve tasks for user: " + e.getMessage(), e);
+        }
+    }
+
     // Update a task
     public Task updateTask(Task task) {
         try {
@@ -93,6 +106,7 @@ public class TaskService {
             existingTaskEntity.setTitle(task.getTitle());
             existingTaskEntity.setDescription(task.getDescription());
             existingTaskEntity.setStatus(task.getStatus());
+            existingTaskEntity.setPriority(task.getPriority());
             existingTaskEntity.setUpdatedAt(new Date());
 
             return taskRepository.save(existingTaskEntity);
